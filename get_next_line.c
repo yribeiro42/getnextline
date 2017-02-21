@@ -6,7 +6,7 @@
 /*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:17:08 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/21 16:08:25 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/02/21 16:12:08 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static	int		get_next(int fd, char **buffer, char **line)
 
 	while ((read = read_into_buffer(fd, buffer)) > 0)
 	{
-		if (read == -1)
+		if (read < 0)
 			return (-1);
 		if ((eol = ft_strchr(*buffer, '\n')))
 			break;
@@ -54,7 +54,7 @@ int				get_next_line(int fd, char **line)
 {
 	static	char	*buffer;
 
-	if (fd < 0 || !line)
+	if (fd < 0 || line == NULL)
 		return (-1);
 	if (!buffer)
 	{
