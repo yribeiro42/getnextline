@@ -6,7 +6,7 @@
 /*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:17:06 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/27 12:39:04 by yribeiro         ###   ########.fr       */
+/*   Updated: 2017/02/27 13:46:18 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 
-# define BUFF_SIZE 5
+# define BUFF_SIZE 10000
 
 # define RED   "\x1B[31m"
 # define GRN   "\x1B[32m"
