@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:17:08 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/27 13:59:02 by yribeiro         ###   ########.fr       */
+/*   Updated: 2017/02/27 18:06:48 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,19 @@ static	int		get_next(int fd, char **buffer, char **line)
 	int		ret;
 	char	buff[BUFF_SIZE + 1];
 
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	while (!(eol = ft_strchr(*buffer, '\n')) &&
+			(ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
 		*buffer = ft_strjoin(*buffer, buff);
 		if (ret < 0)
 			return (-1);
-		if ((eol = ft_strchr(*buffer, '\n')))
-			break ;
 	}
 	if (ret < BUFF_SIZE && !ft_strlen(*buffer))
+	{
+		ft_strclr(*buffer);
 		return (0);
+	}
 	if (eol)
 	{
 		*line = ft_strsub(*buffer, 0, (eol - *buffer));
