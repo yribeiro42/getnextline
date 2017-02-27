@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:17:08 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/18 19:55:25 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/02/27 12:39:53 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,32 @@ static	int		get_next(int fd, char **buffer, char **line)
 	char	*eol;
 	int		read;
 
-	read = read_into_buffer(fd, buffer);
-	if (read == -1)
-		return (-1);
-	eol = ft_strchr(*buffer, '\n');
-	if (!eol && read)
-		get_next(fd, buffer, line);
+	while ((read = read_into_buffer(fd, buffer)) > 0)
+	{
+		if (read < 0)
+			return (-1);
+		if ((eol = ft_strchr(*buffer, '\n')))
+			break ;
+	}
+	if (read < BUFF_SIZE && !ft_strlen(*buffer))
+		return (0);
 	if (eol)
 	{
 		*line = ft_strsub(*buffer, 0, (eol - *buffer));
 		*buffer = eol + 1;
-		return (1);
 	}
-	if (!read && !eol && **buffer)
+	if (!eol)
 	{
 		*line = ft_strdup(*buffer);
-		printf("buffer %s\n", *buffer);
-		printf("line %s\n", *line);
-		**buffer = 0;
-		return (1);
+		ft_strclr(*buffer);
 	}
-	return (0);
+	return (1);
 }
 
 int				get_next_line(int fd, char **line)
 {
 	static	char	*buffer;
+	int				ret;
 
 	if (fd < 0)
 		return (-1);
@@ -62,6 +62,8 @@ int				get_next_line(int fd, char **line)
 		if (!(buffer = ft_strnew(BUFF_SIZE)))
 			return (-1);
 	}
-	//printf("%d\n", get_next(fd, &buffer, line));
-	return (get_next(fd, &buffer, line));
+	ret = get_next(fd, &buffer, line);
+	if (*line == NULL)
+		return (-1);
+	return (ret);
 }

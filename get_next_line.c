@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:17:08 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/21 16:12:08 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/02/27 12:47:08 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,30 @@ static	int		get_next(int fd, char **buffer, char **line)
 
 	while ((read = read_into_buffer(fd, buffer)) > 0)
 	{
+		//printf(MAG "%s\n" RESET, *buffer);
 		if (read < 0)
 			return (-1);
 		if ((eol = ft_strchr(*buffer, '\n')))
-			break;
+			break ;
 	}
 	if (read < BUFF_SIZE && !ft_strlen(*buffer))
+	{
+		free(*buffer);
 		return (0);
+	}
 	if (eol)
 	{
 		*line = ft_strsub(*buffer, 0, (eol - *buffer));
+		free(*buffer);
 		*buffer = eol + 1;
+		//printf(GRN "line = %s\n" RESET, *line);
+		//printf(RED "buffer = %s\n" RESET, *buffer);
 	}
 	if (!eol)
 	{
 		*line = ft_strdup(*buffer);
-		ft_strclr(*buffer);
+		//ft_strclr(*buffer);
+		free(*buffer);
 	}
 	return (1);
 }
@@ -53,13 +61,14 @@ static	int		get_next(int fd, char **buffer, char **line)
 int				get_next_line(int fd, char **line)
 {
 	static	char	*buffer;
+	int				ret;
 
-	if (fd < 0 || line == NULL)
+	if (fd < 0)
 		return (-1);
 	if (!buffer)
-	{
-		if (!(buffer = ft_strnew(BUFF_SIZE)))
-			return (-1);
-	}
-	return (get_next(fd, &buffer, line));
+		buffer = ft_strnew(1);
+	ret = get_next(fd, &buffer, line);
+	if (*line == NULL)
+		return (-1);
+	return (ret);
 }
