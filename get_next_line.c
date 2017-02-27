@@ -6,7 +6,7 @@
 /*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:17:08 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/27 18:06:48 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/02/27 18:14:25 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int				get_next_line(int fd, char **line)
 	static	char	*buffer;
 	int				ret;
 
-	if (fd < 0)
+	if (fd < 0 || !line)			//fix
 		return (-1);
 	if (!buffer)
 		buffer = ft_strnew(1);
