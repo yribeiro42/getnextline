@@ -6,7 +6,7 @@
 /*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:17:08 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/27 12:39:53 by yribeiro         ###   ########.fr       */
+/*   Updated: 2017/03/01 14:21:54 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,19 @@ static	int		get_next(int fd, char **buffer, char **line)
 	char	*eol;
 	int		read;
 
-	while ((read = read_into_buffer(fd, buffer)) > 0)
+	while (!(eol = ft_strchr(*buffer, '\n')) &&
+		(read = read_into_buffer(fd, buffer)) > 0)
 	{
 		if (read < 0)
 			return (-1);
-		if ((eol = ft_strchr(*buffer, '\n')))
-			break ;
 	}
 	if (read < BUFF_SIZE && !ft_strlen(*buffer))
+	{
+		ft_strclr(*buffer);
+		if (*line)
+			ft_strdel(line);
 		return (0);
+	}
 	if (eol)
 	{
 		*line = ft_strsub(*buffer, 0, (eol - *buffer));
