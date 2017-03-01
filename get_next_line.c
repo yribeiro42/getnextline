@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/17 12:17:08 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/27 18:14:25 by anonymous        ###   ########.fr       */
+/*   Created: 2017/03/01 13:30:16 by yribeiro          #+#    #+#             */
+/*   Updated: 2017/03/01 14:12:57 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static	int		get_next(int fd, char **buffer, char **line)
 	if (ret < BUFF_SIZE && !ft_strlen(*buffer))
 	{
 		ft_strclr(*buffer);
+		if (*line)
+			ft_strdel(line);
 		return (0);
 	}
 	if (eol)

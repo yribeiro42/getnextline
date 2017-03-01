@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/17 12:17:06 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/02/27 17:59:16 by anonymous        ###   ########.fr       */
+/*   Created: 2017/03/01 13:30:16 by yribeiro          #+#    #+#             */
+/*   Updated: 2017/03/01 13:52:02 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 
-# define BUFF_SIZE 10000
+# define BUFF_SIZE 45
 
 # define RED   "\x1B[31m"
 # define GRN   "\x1B[32m"
