@@ -6,7 +6,7 @@
 /*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 12:17:08 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/03/01 14:21:54 by yribeiro         ###   ########.fr       */
+/*   Updated: 2017/03/23 14:31:32 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ static	int		get_next(int fd, char **buffer, char **line)
 		if (read < 0)
 			return (-1);
 	}
-	if (read < BUFF_SIZE && !ft_strlen(*buffer))
-	{
+	if (read < BUFF_SIZE && !ft_strlen(*buffer)) 	// if buffer empty
+	{												// frees and returns 0
 		ft_strclr(*buffer);
 		if (*line)
 			ft_strdel(line);
@@ -59,13 +59,10 @@ int				get_next_line(int fd, char **line)
 	static	char	*buffer;
 	int				ret;
 
-	if (fd < 0)
+	if (fd < 0 || !line)
 		return (-1);
 	if (!buffer)
-	{
-		if (!(buffer = ft_strnew(BUFF_SIZE)))
-			return (-1);
-	}
+		buffer = ft_strnew(1);
 	ret = get_next(fd, &buffer, line);
 	if (*line == NULL)
 		return (-1);
