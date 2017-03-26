@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/01 13:30:16 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/03/23 14:45:56 by yribeiro         ###   ########.fr       */
+/*   Updated: 2017/03/26 17:39:04 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,3 +60,4 @@ int				get_next_line(int fd, char **line)
 		return (-1);
 	return (ret);
 }
+
