@@ -9,6 +9,6 @@ int		main(int argc, char **argv)
 	if (argc == 2)
 		fd = open(argv[1], O_RDONLY);
 	while (get_next_line(fd, &line) == 1)
-		printf(GRN "%s\n" RESET, line);
+		printf("%s\n", line);
 	return (0);
 }

@@ -3,61 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/01 13:30:16 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/03/26 17:39:04 by anonymous        ###   ########.fr       */
+/*   Created: 2017/03/27 13:24:29 by yribeiro          #+#    #+#             */
+/*   Updated: 2017/03/27 16:24:35 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static	int		get_next(int fd, char **buffer, char **line)
+t_list		*get_next_fd(int fd, t_list **head)
 {
-	char	*eol;
-	int		ret;
-	char	buff[BUFF_SIZE + 1];
+	t_list	*tmp;
 
-	while (!(eol = ft_strchr(*buffer, '\n')) &&
-			(ret = read(fd, buff, BUFF_SIZE)) > 0)
+	tmp = *head;
+	while (tmp)
 	{
-		buff[ret] = '\0';
-		*buffer = ft_strjoin(*buffer, buff);
-		if (ret < 0)
-			return (-1);
+		if ((int)tmp->content_size == fd)
+			return (tmp);
+		tmp = tmp->next;
 	}
-	if (ret < BUFF_SIZE && !ft_strlen(*buffer))
-	{
-		ft_strclr(*buffer);
-		if (*line)
-			ft_strdel(line);
-		return (0);
-	}
-	if (eol)
-	{
-		*line = ft_strsub(*buffer, 0, (eol - *buffer));
-		*buffer = eol + 1;
-	}
-	if (!eol)
-	{
-		*line = ft_strdup(*buffer);
-		ft_strclr(*buffer);
-	}
-	return (1);
+	tmp = ft_lstnew("\0", fd);
+	ft_lstadd(head, tmp);
+	return (tmp);
 }
 
-int				get_next_line(int fd, char **line)
+int			get_next_line(int fd, char **line)
 {
-	static	char	*buffer;
+	t_list 	static	*list;
+	t_list			*head;
+	char			buffer[BUFF_SIZE + 1];
 	int				ret;
+	char			*tmp;
 
-	if (fd < 0 || !line)			//fix
+	if (fd < 0 || !line)
 		return (-1);
-	if (!buffer)
-		buffer = ft_strnew(1);
-	ret = get_next(fd, &buffer, line);
-	if (*line == NULL)
-		return (-1);
-	return (ret);
+	head = list;
+	list = get_next_fd(fd, &head);
+	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
+	{
+		buffer[ret] = '\0';
+		list->content = ft_strjoin(list->content, buffer);
+		if (ft_strchr(buffer, EOL))
+			break ;
+	}
+	ret = 0;
+	while (((char *)list->content)[ret] != EOL && ((char *)list->content)[ret])
+		ret++;
+	*line = ft_strndup(list->content, ret);
+	if (((char *)list->content)[ret] == EOL)
+		ret++;
+	tmp = list->content;
+	list->content = ft_strdup(list->content + ret);
+	free(tmp);
+	printf(RED "tmp = %s\n" RESET, tmp);
+	list = head;
+	return (ret ? 1 : 0);
 }
-
