@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 13:24:29 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/03/29 17:19:17 by yribeiro         ###   ########.fr       */
+/*   Updated: 2017/03/29 20:21:27 by anonymous        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int			get_next_line(int fd, char **line)
 	char			buffer[BUFF_SIZE + 1];
 	int				ret;
 
-	if (((head = list) && fd < 0) || line == NULL)
+	if (((head = list) && fd < 0) || line == NULL || read(fd, buffer, 0) < 0)
 		return (-1);
 	list = get_next_fd(fd, &head);
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
@@ -63,8 +63,8 @@ int			get_next_line(int fd, char **line)
 		if (ft_strchr(buffer, EOL))
 			break ;
 	}
-	if (ret < 0)
-		return (-1);
+	//if (ret < 0)
+	//	return (-1);
 	ret = 0;
 	while (((char *)list->content)[ret] != EOL && ((char *)list->content)[ret])
 		ret++;
