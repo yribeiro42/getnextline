@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anonymous <anonymous@student.42.fr>        +#+  +:+       +#+        */
+/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 13:24:29 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/03/28 20:16:06 by anonymous        ###   ########.fr       */
+/*   Updated: 2017/03/29 15:41:52 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,15 @@ t_list		*get_next_fd(int fd, t_list **head)
 	return (tmp);
 }
 
+void		get_next_free(t_list *list, char *buffer)
+{
+	char *tmp;
+
+	tmp = list->content;
+	list->content = ft_strjoin(list->content, buffer);
+	free(tmp);
+}
+
 int			get_next_line(int fd, char **line)
 {
 	t_list	static	*list;
@@ -42,10 +51,12 @@ int			get_next_line(int fd, char **line)
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
-		list->content = ft_strjoin(list->content, buffer);
+		get_next_free(list, buffer);
 		if (ft_strchr(buffer, EOL))
 			break ;
 	}
+	if (ret < 0)
+		return (-1);
 	ret = 0;
 	while (((char *)list->content)[ret] != EOL && ((char *)list->content)[ret])
 		ret++;
