@@ -6,7 +6,7 @@
 /*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 13:24:29 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/03/29 15:41:52 by yribeiro         ###   ########.fr       */
+/*   Updated: 2017/03/29 17:19:17 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,15 @@ void		get_next_free(t_list *list, char *buffer)
 	free(tmp);
 }
 
+void		get_last_free(t_list *list, int ret)
+{
+	char *tmp;
+
+	tmp = list->content;
+	list->content = ft_strdup(list->content + ret);
+	free(tmp);
+}
+
 int			get_next_line(int fd, char **line)
 {
 	t_list	static	*list;
@@ -44,9 +53,8 @@ int			get_next_line(int fd, char **line)
 	char			buffer[BUFF_SIZE + 1];
 	int				ret;
 
-	if (fd < 0 || line == NULL)
+	if (((head = list) && fd < 0) || line == NULL)
 		return (-1);
-	head = list;
 	list = get_next_fd(fd, &head);
 	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
@@ -63,7 +71,7 @@ int			get_next_line(int fd, char **line)
 	*line = ft_strndup(list->content, ret);
 	if (((char *)list->content)[ret] == EOL)
 		ret++;
-	list->content = ft_strdup(list->content + ret);
+	get_last_free(list, ret);
 	list = head;
 	return (ret ? 1 : 0);
 }
