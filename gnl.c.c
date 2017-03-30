@@ -6,7 +6,7 @@
 /*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/27 13:24:29 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/03/30 18:36:31 by yribeiro         ###   ########.fr       */
+/*   Updated: 2017/03/30 14:28:25 by yribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,55 +28,47 @@ t_list		*get_next_fd(int fd, t_list **head)
 	return (tmp);
 }
 
-char		*get_next_free(char *content, char *buffer)
+void		get_next_free(t_list *list, char *buffer)
 {
 	char *tmp;
 
-	tmp = content;
-	content = ft_strjoin(content, buffer);
+	tmp = list->content;
+	list->content = ft_strjoin(list->content, buffer);
 	free(tmp);
-	return (content);
 }
 
-char		*get_last_free(char *content, int ret)
+void		get_last_free(t_list *list, int ret)
 {
 	char *tmp;
 
-	tmp = content;
-	content = ft_strdup(content + ret);
+	tmp = list->content;
+	list->content = ft_strdup(list->content + ret);
 	free(tmp);
-	return (content);
 }
 
 int			get_next_line(int fd, char **line)
 {
-	t_list	static	*list;
+	static	t_list	*list;
 	t_list			*head;
 	char			buffer[BUFF_SIZE + 1];
 	int				ret;
-	//char			*tmp;
 
 	if (fd < 0 || line == NULL || read(fd, buffer, 0) < 0)
 		return (-1);
 	head = list;
 	list = get_next_fd(fd, &head);
-	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
+	while (!(ft_strchr(buffer, EOL)) && (ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
 		buffer[ret] = '\0';
-		list->content = get_next_free(list->content, buffer);
-		if (ft_strchr(buffer, EOL))
-			break ;
+		get_next_free(list, buffer);
 	}
 	ret = 0;
 	while (((char *)list->content)[ret] != EOL && ((char *)list->content)[ret])
-		++ret;
+		ret++;
 	*line = strndup(list->content, ret);
 	if (((char *)list->content)[ret] == EOL)
 		ret++;
-	list->content = get_last_free(list->content, ret);
-	//tmp = list->content;
-	//list->content = ft_strdup(list->content + ret);
-	//free(tmp);
+	get_last_free(list, ret);
 	list = head;
 	return (ret ? 1 : 0);
 }
