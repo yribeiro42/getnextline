@@ -23,12 +23,13 @@ t_list		*get_next_fd(int fd, t_list **head)
 			return (tmp);
 		tmp = tmp->next;
 	}
-	tmp = ft_lstnew("\0", fd);
+	tmp = ft_lstnew("\0", 1);
+	tmp->content_size = fd;
 	ft_lstadd(head, tmp);
 	return (tmp);
 }
 
-char		*get_next_free(char *content, char *buffer)
+static char		*get_next_free(char *content, char *buffer)
 {
 	char *tmp;
 
@@ -38,7 +39,7 @@ char		*get_next_free(char *content, char *buffer)
 	return (content);
 }
 
-char		*get_last_free(char *content, int ret)
+static char		*get_last_free(char *content, int ret)
 {
 	char *tmp;
 
@@ -54,13 +55,12 @@ int			get_next_line(int fd, char **line)
 	t_list			*head;
 	char			buffer[BUFF_SIZE + 1];
 	int				ret;
-	//char			*tmp;
 
 	if (fd < 0 || line == NULL || read(fd, buffer, 0) < 0)
 		return (-1);
 	head = list;
 	list = get_next_fd(fd, &head);
-	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
+	while (ret = read(fd, buffer, BUFF_SIZE))
 	{
 		buffer[ret] = '\0';
 		list->content = get_next_free(list->content, buffer);
@@ -69,14 +69,11 @@ int			get_next_line(int fd, char **line)
 	}
 	ret = 0;
 	while (((char *)list->content)[ret] != EOL && ((char *)list->content)[ret])
-		++ret;
-	*line = strndup(list->content, ret);
+		ret++;
+	*line = ft_strndup(list->content, ret);
 	if (((char *)list->content)[ret] == EOL)
 		ret++;
 	list->content = get_last_free(list->content, ret);
-	//tmp = list->content;
-	//list->content = ft_strdup(list->content + ret);
-	//free(tmp);
 	list = head;
 	return (ret ? 1 : 0);
 }
