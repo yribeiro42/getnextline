@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-t_list		*get_next_fd(int fd, t_list **head)
+static t_list		*get_next_fd(int fd, t_list **head)
 {
 	t_list	*tmp;
 
